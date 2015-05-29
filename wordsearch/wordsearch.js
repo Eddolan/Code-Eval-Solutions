@@ -6,7 +6,7 @@ function checkPaths( matrix, wordArr ){
   // looping through all i and j combinations and passing to gen words
   for ( i = 0; i < matrix.length; i++ ){
     for ( j = 0; j < matrix[ i ].length; j++ ){
-      if ( validPath( i, j, wordArr ) ){
+      if ( validPath( i, j, wordArr, [] ) ){
         return true;
       }
     };
@@ -14,7 +14,7 @@ function checkPaths( matrix, wordArr ){
 
   return false
 
-  function validPath( i, j, wordArr){
+  function validPath( i, j, wordArr, path){
     // if we are out of bounds return false
     if ( i < 0 || j < 0 || i >= matrix.length || j >= matrix[ i ].length ){
       return false;
@@ -26,7 +26,9 @@ function checkPaths( matrix, wordArr ){
     }
 
     // if this char matches the next char in the word we can proceed
-    if ( wordArr[0] === matrix[ i ][ j ]){
+    if ( wordArr[0] === matrix[ i ][ j ] && path.indexOf( '' + i + j ) === -1){
+      path = path.slice();
+      path.push( '' + i + j );
       return iterator();
     } else {
       return false;
@@ -43,7 +45,7 @@ function checkPaths( matrix, wordArr ){
         [ i, j - 1]
       ]
       return subpaths.some( function( tup ){
-        return validPath( tup[0], tup[1], subStrArrr);
+        return validPath( tup[0], tup[1], subStrArrr, path );
       })
     }
 
@@ -60,3 +62,5 @@ fs.readFileSync(filename).toString().split('\n').forEach(function (line) {
       }
     }
 });
+
+
